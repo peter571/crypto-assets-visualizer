@@ -34,7 +34,7 @@ export default function List() {
     }
     return (
         <div className='list'>
-            <h1 className='app-title'>Crypto Graphs</h1>
+            <h1 className='app-title'>Crypto VR</h1>
             <SearchBar />
             {searchTerm === "" ? (
                 <CompaniesList />

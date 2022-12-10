@@ -11,5 +11,5 @@ A great Web Application with a single Landing page to visualize upto 100 differe
 > Live site [crypto-assets-visualizer](https://crypto-assets-visualizer.netlify.app/)
 
 <p align="center">
-<img width="100%" src="https://github.com/peter571/crypto-assets-visualizer/blob/master/assets/Crypto_VR.png" alt="Crypto Assets" />
+<img width="100%" src="https://github.com/peter571/crypto-assets-visualizer/blob/master/src/assets/Crypto_VR.png" alt="Crypto Assets" />
 </p>
