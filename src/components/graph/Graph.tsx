@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -12,6 +12,9 @@ import {
 import { Line } from 'react-chartjs-2';
 import { SlCalender } from 'react-icons/sl'
 import { IoIosArrowDown, IoIosArrowUp, } from 'react-icons/io'
+import { useCoinsData } from '../../contexts/CoinsContext';
+
+const priceChangesOptions = ["1h", "24h", "7d", "14d", "30d", "200d", "1y"];
 
 ChartJS.register(
     CategoryScale,
@@ -24,20 +27,25 @@ ChartJS.register(
 );
 
 export const options = {
+    layout: {
+        padding: 15
+    },
+    aspectRatio: 2.4,
+    maintainAspectRatio: true,
     legend: {
         display: false
     },
     tooltips: {
         callbacks: {
             label: function (tooltipItem: any) {
-                return tooltipItem.yLabel;
+                return tooltipItem.xLabel;
             }
         }
     },
     scales: {
         x: {
             grid: {
-                display: true
+                display: false
             },
             ticks: {
                 callback: function (value: any, index: any, values: any) {
@@ -62,36 +70,50 @@ export const options = {
             position: 'top' as const,
         },
         title: {
-            display: false,
-            text: 'Stock Prices Chart',
+            display: true,
+            text: 'Last 7 days Prices',
         },
     },
 };
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-
-const utils = [4, 6, 4, 5, 6, 2, 3];
-export const data = {
-    labels,
-    datasets: [
-        {
-            label: '',
-            data: utils.map((el) => Math.floor(Math.random() * 50) * el),
-            borderColor: 'rgba(0, 0, 0, 1)',
-            backgroundColor: 'transparent',
-            tension: 0.3
-
-        }
-    ],
-};
+const labels = ['', '', '', '', '', '', ''];
 
 export default function Graph() {
-    const [show, setShow] = useState(false);
+    const { selectedAsset } = useCoinsData();
+    const [price_change_percentage, setPercentage] = useState("1h")
+
+    useEffect(() => {
+        if (selectedAsset.coinName) {
+            console.log(selectedAsset.asset.market_data.sparkline_7d.price)
+        }
+    }, [selectedAsset])
+
+    const handleChange = (e: React.ChangeEvent<any>) => {
+        setPercentage(e.target.value);
+    }
+
+    const price = new Intl.NumberFormat().format(selectedAsset.asset.market_data.current_price.usd);
+    const percentageChange = selectedAsset.asset.market_data[`price_change_percentage_${price_change_percentage}_in_currency`].usd;
+    const prices = selectedAsset.asset.market_data.sparkline_7d.price;
+
+    const data = {
+        labels,
+        datasets: [
+            {
+                label: '',
+                data: prices,
+                borderColor: 'rgba(0, 0, 0, 1)',
+                backgroundColor: 'transparent',
+                tension: 0.3
+
+            }
+        ],
+    };
 
     return (
         <div className='graph'>
             <div className='nav-wrapper'>
-                <h1 className='selected-stock'>Tezos</h1>
+                <h1 className='selected-stock'>{selectedAsset.coinName}</h1>
                 <div className='calender-wrapper'>
                     <SlCalender size={24} className='calender-icon' />
                     <button className='date-btn' disabled>
@@ -99,23 +121,20 @@ export default function Graph() {
                     </button>
                 </div>
             </div>
+            <div className='prices-wrapper'>
+                <span className='price'>${price}</span>
+                <span className={`${Number(percentageChange) > 0 ? 'percentagechange' : 'negative-price-change'}`}>{percentageChange}</span>
+            </div>
             <div className='closing-price-wrapper'>
-                <button
-                    className='closing-price-btn'
-                    onClick={() => setShow(prev => !prev)}>
-                    Closing price
-                    {show ?
-                        <IoIosArrowUp /> : <IoIosArrowDown />}
-                </button>
-                <div
-                    className='close-price-display'
-                    style={{ visibility: show ? 'visible' : 'hidden' }}>
-                    <p className='price-txt'>Closing Price</p>
-                    <p className='price-txt'>Adj. Closing Price</p>
-                </div>
+
+                <select onChange={handleChange} name="pricechanges" id="pricechanges">
+                    {priceChangesOptions.map((el, index) => (
+                        <option key={index} value={el}>{el}</option>
+                    ))}
+                </select>
             </div>
             <div className='graph-wrapper'>
-            <Line data={data} options={options} />
+                <Line data={data} options={options} />
             </div>
         </div>
     )

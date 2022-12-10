@@ -2,6 +2,7 @@ html,
 body {
   padding: 0;
   margin: 0;
+  box-sizing: border-box;
 }
 
 .app {
@@ -14,7 +15,7 @@ body {
   color: #51459E;
   font-family: Poppins;
   font-size: 22px;
-  font-weight: 600;
+  font-weight: bolder;
   line-height: 33px;
   letter-spacing: 0em;
   text-align: left;
@@ -69,12 +70,14 @@ body {
 }
 
 .graph-wrapper {
-  height: 20%;
+  display: block;
+  justify-content: center;
 }
+
 .selected-stock {
   font-family: Poppins;
   font-size: 22px;
-  font-weight: 500;
+  font-weight: bolder;
   line-height: 33px;
   letter-spacing: 0em;
   color: rgba(81, 69, 158, 1);
@@ -100,7 +103,7 @@ body {
 }
 
 .date-btn {
-  height: 40px;
+  padding: 10px;
   width: 280px;
   border-radius: 10px;
   background: #51459E;
@@ -115,11 +118,42 @@ body {
 }
 
 .closing-price-wrapper {
-  position: relative;
+  display: block;
+  padding: 10px;
+  gap: 10px;
+}
+
+.prices-wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  gap: 5px;
+}
+
+.percentagechange {
+  font-weight: lighter;
+  color: green;
+}
+
+.percentagechange::before {
+  content: "+";
+}
+
+.negative-price-change {
+  font-weight: lighter;
+  color: red;
+}
+
+.negative-price-change::before {
+  content: "-";
+}
+
+.price {
+  font-weight: bold;
 }
 
 .closing-price-btn {
-  height: 40px;
+  padding: 10px;
   width: 182px;
   border-radius: 5px;
   background: #51459E;
@@ -132,7 +166,7 @@ body {
   font-family: Poppins;
   font-size: 18px;
   font-weight: 400;
-  line-height: 27px;
+  line-height: 22px;
   letter-spacing: 0em;
   text-align: left;
   outline: none !important;
@@ -159,4 +193,28 @@ body {
   line-height: 24px;
   letter-spacing: 0em;
   text-align: left;
+}
+
+#asset-item {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  align-items: center;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+#asset-item:hover {
+  background-color: #51459E;
+}
+
+#asset-item img {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%; 
+}
+
+#asset-item:hover h1 {
+  color: #FFFFFF;
 }
