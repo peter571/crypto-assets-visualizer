@@ -3,6 +3,7 @@ body {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  background-color: #000;
 }
 
 .app {
@@ -12,7 +13,7 @@ body {
 }
 
 .app-title {
-  color: #51459E;
+  color: #b7babe;
   font-family: Poppins;
   font-size: 22px;
   font-weight: bolder;
@@ -28,11 +29,13 @@ body {
   border: none;
   margin: 10px 0;
   padding: 7px 8px;
+  background-color: #1e1f25;
+  color: #FFFFFF;
 }
 
 .search-bar:focus {
   outline: none !important;
-  box-shadow: 0 0 10px #51459E;
+  box-shadow: 0 0 10px #e5e7eb;
 }
 
 .list {
@@ -40,14 +43,14 @@ body {
   flex-direction: column;
   width: 20%;
   border-radius: 0px;
-  background: #F7F8FD;
+  background: #262833;
   padding: 15px;
 }
 
 .companies-list {
   width: 85%;
   border-radius: 5px;
-  background: #FFFFFF;
+  background: #1e1f25;
   padding: 20px;
   overflow: scroll;
 }
@@ -59,7 +62,7 @@ body {
   line-height: 27px;
   letter-spacing: 0em;
   text-align: left;
-  color: #000000;
+  color: #b7babe;
 }
 
 .graph {
@@ -72,6 +75,8 @@ body {
 .graph-wrapper {
   display: block;
   justify-content: center;
+  background-color: #1e1f25;
+  border-radius: 10px;
 }
 
 .selected-stock {
@@ -80,7 +85,7 @@ body {
   font-weight: bolder;
   line-height: 33px;
   letter-spacing: 0em;
-  color: rgba(81, 69, 158, 1);
+  color: #b7babe;
 }
 
 .nav-wrapper {
@@ -97,29 +102,29 @@ body {
 }
 
 .calender-icon {
-  color: #51459E;
+  color: #e5e7eb;
   font-weight: bold;
-  cursor: pointer;
 }
 
 .date-btn {
   padding: 10px;
   width: 280px;
   border-radius: 10px;
-  background: #51459E;
+  background: #1e1f25;
   outline: none !important;
   border: none;
   color: #FFFFFF;
   font-family: Poppins;
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: lighter;
   line-height: 27px;
   letter-spacing: 0em;
 }
 
 .closing-price-wrapper {
-  display: block;
-  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
   gap: 10px;
 }
 
@@ -133,6 +138,13 @@ body {
 .percentagechange {
   font-weight: lighter;
   color: green;
+  font-size: medium;
+}
+
+.price-change-wrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
 }
 
 .percentagechange::before {
@@ -142,21 +154,26 @@ body {
 .negative-price-change {
   font-weight: lighter;
   color: red;
+  font-size: medium;
 }
 
 .negative-price-change::before {
-  content: "-";
+  content: "";
 }
 
 .price {
-  font-weight: bold;
+  font-size: 22px;
+  font-weight: bolder;
+  line-height: 33px;
+  letter-spacing: 0em;
+  color: #e5e7eb;
 }
 
 .closing-price-btn {
   padding: 10px;
   width: 182px;
   border-radius: 5px;
-  background: #51459E;
+  background: #e5e7eb;
   color: #FFFFFF;
   display: flex;
   align-items: center;
@@ -206,7 +223,7 @@ body {
 }
 
 #asset-item:hover {
-  background-color: #51459E;
+  background-color: #272830;
 }
 
 #asset-item img {
@@ -217,4 +234,14 @@ body {
 
 #asset-item:hover h1 {
   color: #FFFFFF;
+}
+
+#pricechanges {
+  cursor: pointer;
+  padding: 5px 10px;
+  margin-bottom: 10px;
+}
+
+.no-result {
+  color: #e5e7eb;
 }

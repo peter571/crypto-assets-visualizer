@@ -11,8 +11,8 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { SlCalender } from 'react-icons/sl'
-import { IoIosArrowDown, IoIosArrowUp, } from 'react-icons/io'
 import { useCoinsData } from '../../contexts/CoinsContext';
+import { Last7Days, options, Last7DaysWithYear } from '../../utils/util';
 
 const priceChangesOptions = ["1h", "24h", "7d", "14d", "30d", "200d", "1y"];
 
@@ -26,86 +26,50 @@ ChartJS.register(
     Legend
 );
 
-export const options = {
-    layout: {
-        padding: 15
-    },
-    aspectRatio: 2.4,
-    maintainAspectRatio: true,
-    legend: {
-        display: false
-    },
-    tooltips: {
-        callbacks: {
-            label: function (tooltipItem: any) {
-                return tooltipItem.xLabel;
-            }
-        }
-    },
-    scales: {
-        x: {
-            grid: {
-                display: false
-            },
-            ticks: {
-                callback: function (value: any, index: any, values: any) {
-                    return '';
-                }
-            }
-        },
-        y: {
-            grid: {
-                display: false
-            },
-            ticks: {
-                callback: function (value: any, index: any, values: any) {
-                    return '';
-                }
-            }
-        }
-    },
-    responsive: true,
-    plugins: {
-        legend: {
-            position: 'top' as const,
-        },
-        title: {
-            display: true,
-            text: 'Last 7 days Prices',
-        },
-    },
-};
-
-const labels = ['', '', '', '', '', '', ''];
-
 export default function Graph() {
     const { selectedAsset } = useCoinsData();
     const [price_change_percentage, setPercentage] = useState("1h")
+    const [price_change_percentage_7d, setPercentage7d] = useState("")
+    const [prices, setPrices] = useState([])
+    const [percentageChange, setPercentageChange] = useState("")
+    const [price, setPrice] = useState("")
+    const [xlabels, setLabels] = useState<any[]>([])
 
     useEffect(() => {
         if (selectedAsset.coinName) {
-            console.log(selectedAsset.asset.market_data.sparkline_7d.price)
+            setPrices(selectedAsset.asset.market_data.sparkline_7d.price);
+            setPrice(new Intl.NumberFormat().format(selectedAsset.asset.market_data.current_price.usd));
+            setPercentage7d(selectedAsset.asset.market_data["price_change_percentage_7d"]);
         }
     }, [selectedAsset])
+
+    useEffect(() => {
+        if (selectedAsset.coinName) {
+            setPercentageChange(selectedAsset.asset.market_data[`price_change_percentage_${price_change_percentage}_in_currency`].usd)
+        }
+    }, [price_change_percentage, selectedAsset])
+
+    useEffect(() => {
+        setLabels(Last7Days())
+    }, [])
 
     const handleChange = (e: React.ChangeEvent<any>) => {
         setPercentage(e.target.value);
     }
 
-    const price = new Intl.NumberFormat().format(selectedAsset.asset.market_data.current_price.usd);
-    const percentageChange = selectedAsset.asset.market_data[`price_change_percentage_${price_change_percentage}_in_currency`].usd;
-    const prices = selectedAsset.asset.market_data.sparkline_7d.price;
+    const dateLabels = Last7DaysWithYear();
 
     const data = {
-        labels,
+        labels: xlabels,
         datasets: [
             {
                 label: '',
                 data: prices,
-                borderColor: 'rgba(0, 0, 0, 1)',
-                backgroundColor: 'transparent',
-                tension: 0.3
-
+                borderColor: `${Number(price_change_percentage_7d) > 0 ? 'green' : 'red'}`,
+                backgroundColor: `${Number(price_change_percentage_7d) > 0 ? 'green' : 'red'}`,
+                fill: true,
+                tension: 0.5,
+                pointBorderWidth: 1
             }
         ],
     };
@@ -117,21 +81,21 @@ export default function Graph() {
                 <div className='calender-wrapper'>
                     <SlCalender size={24} className='calender-icon' />
                     <button className='date-btn' disabled>
-                        Jun 5, 1998 - Dec 31, 2018
+                        {`${dateLabels[6]} - ${dateLabels[0]}`}
                     </button>
                 </div>
             </div>
-            <div className='prices-wrapper'>
-                <span className='price'>${price}</span>
-                <span className={`${Number(percentageChange) > 0 ? 'percentagechange' : 'negative-price-change'}`}>{percentageChange}</span>
-            </div>
-            <div className='closing-price-wrapper'>
 
-                <select onChange={handleChange} name="pricechanges" id="pricechanges">
-                    {priceChangesOptions.map((el, index) => (
-                        <option key={index} value={el}>{el}</option>
-                    ))}
-                </select>
+            <div className='closing-price-wrapper'>
+                <span className='price'>${price}</span>
+                <div className='price-change-wrapper'>
+                    <span className={`${Number(percentageChange) > 0 ? 'percentagechange' : 'negative-price-change'}`}>{percentageChange}%</span>
+                    <select onChange={handleChange} name="pricechanges" id="pricechanges">
+                        {priceChangesOptions.map((el, index) => (
+                            <option key={index} value={el}>{el}</option>
+                        ))}
+                    </select>
+                </div>
             </div>
             <div className='graph-wrapper'>
                 <Line data={data} options={options} />

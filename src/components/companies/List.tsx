@@ -11,7 +11,7 @@ export default function List() {
         return (
             <div className='companies-list'>
                 {filteredAssets.length === 0 ? (
-                    <span>No assets found...</span>
+                    <span className='no-result'>No assets found...</span>
                 ) : (
                     <>
                         {filteredAssets.map((asset, index) => (
